@@ -3,6 +3,7 @@ from django.views import generic
 from .models import Todo
 from django.http import HttpResponseRedirect
 
+
 class IndexView(generic.ListView):
     template_name = 'todos/index.html'
     context_object_name = 'todo_list'
@@ -11,9 +12,13 @@ class IndexView(generic.ListView):
         """Return all the latest todos."""
         return Todo.objects.order_by('-created_at')
 
+
 def add(request):
     title = request.POST['title']
-    Todo.objects.create(title=title)
+    deadline = request.POST['deadline']
+    if deadline < datetime.now():
+        return redirect('todos:index')
+    Todo.objects.create(title=title, deadline=deadline)
 
     return redirect('todos:index')
 
@@ -28,8 +33,11 @@ def update(request, todo_id):
     isCompleted = request.POST.get('isCompleted', False)
     if isCompleted == 'on':
         isCompleted = True
-    
     todo.isCompleted = isCompleted
+    deadline = request.POST['deadline']
+    if deadline < datetime.now():
+        return redirect('todos:index')
+    todo.deadline = deadline
 
     todo.save()
     return redirect('todos:index')
