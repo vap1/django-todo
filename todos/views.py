@@ -5,22 +5,22 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 import datetime
 
-
 class IndexView(generic.ListView):
     template_name = 'todos/index.html'
     context_object_name = 'todo_list'
 
     def get_queryset(self):
-        """Return all the latest todos."""
         return Todo.objects.order_by('-created_at')
 
 
 def add(request):
     title = request.POST['title']
     deadline = request.POST['deadline']
-    deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
+    try:
+        deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
+    except ValueError:
+        return redirect('todos:index')
     if deadline_date < timezone.now():
-        # Handle the error appropriately, e.g., set an error message in the context or redirect with an error parameter
         return redirect('todos:index')
     Todo.objects.create(title=title, deadline=deadline_date)
 
@@ -39,9 +39,11 @@ def update(request, todo_id):
         isCompleted = True
     todo.isCompleted = isCompleted
     deadline = request.POST['deadline']
-    deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
+    try:
+        deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
+    except ValueError:
+        return redirect('todos:index')
     if deadline_date < timezone.now():
-        # Handle the error appropriately, e.g., set an error message in the context or redirect with an error parameter
         return redirect('todos:index')
     todo.deadline = deadline_date
 
