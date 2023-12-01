@@ -10,7 +10,7 @@ class IndexView(generic.ListView):
     context_object_name = 'todo_list'
 
     def get_queryset(self):
-        return Todo.objects.order_by('-created_at').values('title', 'deadline')
+        return Todo.objects.order_by('-created_at').values('id','title', 'deadline')
 
 
 def add(request):
