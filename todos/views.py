@@ -16,10 +16,9 @@ class IndexView(generic.ListView):
 def add(request):
     title = request.POST['title']
     deadline = request.POST['deadline']
-    try:
-        deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
-    except ValueError:
-        return redirect('todos:index')
+    print(deadline)
+    deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%dT%H:%M')
+    deadline_date = timezone.make_aware(deadline_date, timezone.get_default_timezone())
     if deadline_date < timezone.now():
         return redirect('todos:index')
     Todo.objects.create(title=title, deadline=deadline_date)
