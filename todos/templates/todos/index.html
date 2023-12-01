@@ -54,6 +54,7 @@
               title="{% if not todo.isCompleted %} mark as done {% else %} mark undone {% endif %}">
           </form>
           {{ todo.title }}
+          <span class="deadline">{{ todo.deadline|date:"SHORT_DATETIME_FORMAT" }}</span>
           <a href="{% url 'todos:delete' todo.id %}" title="Delete">
             <i class="far fa-trash-alt"></i>
           </a>
