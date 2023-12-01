@@ -2,6 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import generic
 from .models import Todo
 from django.http import HttpResponseRedirect
+from django.utils import timezone
+import datetime
 
 
 class IndexView(generic.ListView):
@@ -16,9 +18,11 @@ class IndexView(generic.ListView):
 def add(request):
     title = request.POST['title']
     deadline = request.POST['deadline']
-    if deadline < datetime.now():
+    deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
+    if deadline_date < timezone.now():
+        # Handle the error appropriately, e.g., set an error message in the context or redirect with an error parameter
         return redirect('todos:index')
-    Todo.objects.create(title=title, deadline=deadline)
+    Todo.objects.create(title=title, deadline=deadline_date)
 
     return redirect('todos:index')
 
@@ -35,9 +39,11 @@ def update(request, todo_id):
         isCompleted = True
     todo.isCompleted = isCompleted
     deadline = request.POST['deadline']
-    if deadline < datetime.now():
+    deadline_date = datetime.datetime.strptime(deadline, '%Y-%m-%d')
+    if deadline_date < timezone.now():
+        # Handle the error appropriately, e.g., set an error message in the context or redirect with an error parameter
         return redirect('todos:index')
-    todo.deadline = deadline
+    todo.deadline = deadline_date
 
     todo.save()
     return redirect('todos:index')
