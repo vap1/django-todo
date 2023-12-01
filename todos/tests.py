@@ -21,3 +21,10 @@ class TodoTests(TestCase):
         updated_todo = Todo.objects.get(id=todo.id)
         self.assertTrue(updated_todo.isCompleted)
         self.assertGreaterEqual(updated_todo.deadline, datetime.now())
+
+    def test_index_view(self):
+        response = self.client.get(reverse('todos:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Todo List')
+        self.assertQuerysetEqual(response.context['todo_list'], Todo.objects.all(), transform=lambda x: x)
+        self.assertContains(response, 'deadline')
