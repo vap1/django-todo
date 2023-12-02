@@ -1,3 +1,5 @@
+```
+
 """
 Django settings for todoApp project.
 
@@ -127,3 +129,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'staticfiles'),
 )
+
+# Custom User Model
+AUTH_USER_MODEL = 'todos.CustomUser'
+```

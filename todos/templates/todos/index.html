@@ -63,6 +63,39 @@
       </div>
     </div>
   </div>
+
+  <!-- User registration row -->
+  <div class="row">
+    <div class="offset-md-2 col-lg-9">
+      <form method="post" action="{% url 'todos:register' %}">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="col-md-6">
+            <input type="email" class="form-control" name="email" placeholder="Email" required>
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="phone" placeholder="Phone Number" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-6">
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+          </div>
+          <div class="col-md-6">
+            <input type="date" class="form-control" name="dob" placeholder="Date of Birth" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="col-md-12">
+            <button type="submit" name="submit" class="btn btn-outline-primary">
+              Register
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </div>
 
 {% endblock %}

@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.utils import timezone
 import datetime
 
+
 class IndexView(generic.ListView):
     template_name = 'todos/index.html'
     context_object_name = 'todo_list'
@@ -48,3 +49,24 @@ def update(request, todo_id):
 
     todo.save()
     return redirect('todos:index')
+
+
+def register(request):
+    if request.method == 'POST':
+        # Handle user registration
+        email = request.POST['email']
+        phone_number = request.POST['phone_number']
+        password = request.POST['password']
+        date_of_birth = request.POST['date_of_birth']
+
+        # Validate the data
+        # ...
+
+        # Create the user
+        # ...
+
+        # Return the generated userId
+        return HttpResponse('User registered successfully!')
+    else:
+        # Render the registration form
+        return render(request, 'todos/register.html')
