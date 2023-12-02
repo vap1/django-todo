@@ -7,6 +7,18 @@
 {% block content %}
 <div class="container">
 
+  <!-- User links row -->
+  <div class="row mb-3">
+    <div class="offset-md-2 col-lg-9">
+      {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'registration' %}">Register</a> |
+        <a href="{% url 'login' %}">Login</a>
+      {% endif %}
+    </div>
+  </div>
+
   <!-- title row -->
   <div class="row">
     <div class="offset-md-2 col-lg-9">
@@ -46,6 +58,7 @@
     <div class="offset-md-2 col-lg-6">
       <div class="list-group">
         {% for todo in todo_list %}
+        {% if todo.user == user %}
         <div class="list-group-item {% if todo.isCompleted %} todo-complete {% endif %}">
           <form style="display: inline;" method="post" action="{% url 'todos:update' todo.id %}">
             {% csrf_token %}
@@ -59,6 +72,7 @@
             <i class="far fa-trash-alt"></i>
           </a>
         </div>
+        {% endif %}
         {% endfor %}
       </div>
     </div>
