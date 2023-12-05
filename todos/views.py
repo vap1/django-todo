@@ -4,6 +4,9 @@ from .models import Todo
 from django.http import HttpResponseRedirect
 from django.utils import timezone
 import datetime
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+
 
 class IndexView(generic.ListView):
     template_name = 'todos/index.html'
@@ -48,3 +51,15 @@ def update(request, todo_id):
 
     todo.save()
     return redirect('todos:index')
+
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('todos:index')
+    else:
+        form = UserCreationForm()
+    return render(request, 'todos/register.html', {'form': form})
